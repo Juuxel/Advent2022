@@ -1,18 +1,18 @@
 package juuxel.advent2022;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public final class Day3 {
     public static void main(String[] args) throws Exception {
-        part1();
-        part2();
+        part1(Loader.lines(3));
+        part2(Loader.lines(3));
     }
 
-    private static void part1() throws Exception {
-        int part1 = Loader.lines(3)
+    public static void part1(Stream<String> lines) {
+        int part1 = lines
             .mapToInt(line -> {
                 int length = line.length() / 2;
                 String firstCompartment = line.substring(0, length);
@@ -35,8 +35,8 @@ public final class Day3 {
         System.out.println(part1);
     }
 
-    private static void part2() throws Exception {
-        List<String> lines = Loader.lines(3).toList();
+    public static void part2(Stream<String> lineStream) {
+        List<String> lines = lineStream.toList();
         int part2 = 0;
         for (int i = 0; i < lines.size(); i += 3) {
             Set<Character> chars = new HashSet<>();

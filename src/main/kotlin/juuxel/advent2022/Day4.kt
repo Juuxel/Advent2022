@@ -1,7 +1,9 @@
 package juuxel.advent2022
 
-fun main() {
-    val ranges = Loader.lines(4)
+import java.util.stream.Stream
+
+fun main(lines: Stream<String>) {
+    val ranges = lines
         .map {
             val (firstS, secondS) = it.split(',', limit = 2)
             val first = readRange(firstS)

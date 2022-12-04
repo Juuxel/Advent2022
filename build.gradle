@@ -6,6 +6,16 @@ plugins {
 group 'org.example'
 version '1.0-SNAPSHOT'
 
+sourceSets {
+    main {
+        java.srcDir 'src/main/gui'
+    }
+}
+
 repositories {
     mavenCentral()
+}
+
+dependencies {
+    implementation 'org.cactoos:cactoos:0.55.0'
 }
