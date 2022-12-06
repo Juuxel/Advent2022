@@ -2,6 +2,7 @@ package juuxel.advent2022.gui;
 
 import juuxel.advent2022.Day3;
 import juuxel.advent2022.Day4Kt;
+import juuxel.advent2022.Day6;
 import org.cactoos.io.OutputStreamTo;
 import org.cactoos.io.TeeOutputStream;
 
@@ -38,6 +39,8 @@ public final class AdventGui {
         new Solution("Day 3 (part 1, Java)", 3, lines(Day3::part1)),
         new Solution("Day 3 (part 2, Java)", 3, lines(Day3::part2)),
         new Solution("Day 4 (Kotlin)", 4, lines(Day4Kt::main)),
+        new Solution("Day 6 (part 1, Java)", 6, Day6::part1),
+        new Solution("Day 6 (part 2, Java)", 6, Day6::part2),
     };
 
     public static void main(String[] args) {
