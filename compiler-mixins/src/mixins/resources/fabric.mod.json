@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "id": "ecj_mixins",
+  "version": "1",
+  "mixins": ["ecj_mixins.json"]
+}

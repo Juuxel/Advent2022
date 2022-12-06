@@ -1,0 +1,10 @@
+{
+  "minVersion": "0.8",
+  "package": "juuxel.advent2022.ecj.mixin",
+  "mixins": [
+    "StatementMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

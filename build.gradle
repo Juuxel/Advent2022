@@ -6,6 +6,8 @@ plugins {
 group 'org.example'
 version '1.0-SNAPSHOT'
 
+evaluationDependsOn ':compiler-mixins'
+
 sourceSets {
     main {
         java.srcDir 'src/main/gui'
@@ -14,8 +16,12 @@ sourceSets {
 
 repositories {
     mavenCentral()
+    maven {
+        url = 'https://maven.fabricmc.net'
+    }
 }
 
 dependencies {
     implementation 'org.cactoos:cactoos:0.55.0'
+    implementation project(path: ':compiler-mixins', configuration: 'outgoing')
 }

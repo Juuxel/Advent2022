@@ -1,2 +1,3 @@
 rootProject.name = 'Advent2022'
 
+include 'compiler-mixins'
