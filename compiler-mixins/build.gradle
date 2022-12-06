@@ -1,63 +1,63 @@
 plugins {
-	id 'java'
+    id 'java'
 }
 
 sourceSets {
-	gameProvider
-	mixins
+    gameProvider
+    mixins
 }
 
 configurations {
-	fabricLoader
-	loaderDependencies
+    fabricLoader
+    loaderDependencies
 
-	for (def sourceSet : [sourceSets.gameProvider, sourceSets.mixins]) {
-		configurations.getByName(sourceSet.implementationConfigurationName)
-			.extendsFrom(fabricLoader, loaderDependencies)
-	}
+    for (def sourceSet : [sourceSets.gameProvider, sourceSets.mixins]) {
+        configurations.getByName(sourceSet.implementationConfigurationName)
+                .extendsFrom(fabricLoader, loaderDependencies)
+    }
 
-	outgoing {
-		canBeResolved = false
-		extendsFrom fabricLoader, loaderDependencies
-	}
+    outgoing {
+        canBeResolved = false
+        extendsFrom fabricLoader, loaderDependencies
+    }
 }
 
 repositories {
-	mavenCentral()
-	maven {
-		url = 'https://maven.fabricmc.net'
-	}
+    mavenCentral()
+    maven {
+        url = 'https://maven.fabricmc.net'
+    }
 }
 
 dependencies {
-	fabricLoader 'net.fabricmc:fabric-loader:0.14.11'
-	mixinsImplementation 'org.eclipse.jdt:org.eclipse.jdt.core:3.32.0'
+    fabricLoader 'net.fabricmc:fabric-loader:0.14.11'
+    mixinsImplementation 'org.eclipse.jdt:org.eclipse.jdt.core:3.32.0'
 }
 
 def patternSet = new PatternSet().include('fabric-installer.json')
 def fabricLoaderJar = configurations.fabricLoader.singleFile
-def installerJsonFile =  zipTree(fabricLoaderJar).matching(patternSet).singleFile
+def installerJsonFile = zipTree(fabricLoaderJar).matching(patternSet).singleFile
 
 import groovy.json.JsonSlurper
 def installerJson = new JsonSlurper().parse(installerJsonFile)
 
 for (def library : installerJson.libraries.common) {
-	dependencies {
-		loaderDependencies library.name
-	}
+    dependencies {
+        loaderDependencies library.name
+    }
 }
 
 task gameProviderJar(type: Jar) {
-	archiveClassifier = 'gameProvider'
-	from sourceSets.gameProvider.output
+    archiveClassifier = 'gameProvider'
+    from sourceSets.gameProvider.output
 }
 
 task mixinsJar(type: Jar) {
-	archiveClassifier = 'mixins'
-	from sourceSets.mixins.output
+    archiveClassifier = 'mixins'
+    from sourceSets.mixins.output
 }
 
 artifacts {
-	outgoing gameProviderJar
-	outgoing mixinsJar
+    outgoing gameProviderJar
+    outgoing mixinsJar
 }
