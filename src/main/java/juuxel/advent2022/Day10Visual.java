@@ -1,9 +1,11 @@
 package juuxel.advent2022;
 
 import javax.swing.*;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -33,7 +35,7 @@ public final class Day10Visual extends JComponent {
     }
 
     private void render() {
-        Graphics g = image.createGraphics();
+        Graphics2D g = image.createGraphics();
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, image.getWidth(), image.getHeight());
 
@@ -49,6 +51,9 @@ public final class Day10Visual extends JComponent {
                 g.fillRect(HORIZONTAL_OFFSET + SCALE * x, SCALE * y, SCALE, SCALE);
             }
         }
+        g.setColor(Color.WHITE);
+        g.setStroke(new BasicStroke(2f));
+        g.drawRect(HORIZONTAL_OFFSET + SCALE * (x - 1), SCALE * (cycle / 40), 3 * SCALE, SCALE);
 
         g.dispose();
         repaint();
