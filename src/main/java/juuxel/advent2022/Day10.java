@@ -45,27 +45,38 @@ public final class Day10 {
         System.out.println(part1);
     }
 
-    private static List<Insn> parse(String[] lines) {
+    static List<Insn> parse(String[] lines) {
         List<Insn> instructions = new ArrayList<>();
 
         for (String line : lines) {
-            // addx is twice as long so we simulate it with a NoOp followed by AddX
-            instructions.add(NoOp.INSTANCE);
             if (line.startsWith("addx ")) {
-                instructions.add(new AddX(Integer.parseInt(line.substring("addx ".length()))));
+                // addx is twice as long so we simulate it with a NoOp followed by AddX
+                AddX addx = new AddX(Integer.parseInt(line.substring("addx ".length())));
+                instructions.add(new NoOp(addx));
+                instructions.add(addx);
+            } else {
+                instructions.add(new NoOp(null));
             }
         }
 
         return instructions;
     }
 
-    private sealed interface Insn {
+    sealed interface Insn {
     }
 
-    private enum NoOp implements Insn {
-        INSTANCE
+    // The source is for the visualisation in Swing.
+    record NoOp(AddX source) implements Insn {
+        @Override
+        public String toString() {
+            return source == null ? "noop" : "addx " + source.value + " 1/2";
+        }
     }
 
-    private record AddX(int value) implements Insn {
+    record AddX(int value) implements Insn {
+        @Override
+        public String toString() {
+            return "addx " + value + " 2/2";
+        }
     }
 }
