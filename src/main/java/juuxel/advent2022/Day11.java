@@ -1,54 +1,60 @@
 package juuxel.advent2022;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class Day11Part1 {
-    public static void main(String[] args) {
-        Map<Integer, Monkey> monkeys = partition(args, String::isEmpty).stream()
-            .map(Day11Part1::readMonkey)
-            .collect(Collectors.toMap(Monkey::id, Function.identity()));
-        Map<Integer, Integer> inspectionCounts = new TreeMap<>();
+public final class Day11 {
+    public static void part1(String[] args) {
+        main(args, false);
+    }
 
-        for (int i = 0; i < 20; i++) {
+    public static void part2(String[] args) {
+        main(args, true);
+    }
+
+    private static void main(String[] args, boolean part2) {
+        Map<Integer, Monkey> monkeys = partition(args, String::isEmpty).stream()
+            .map(Day11::readMonkey)
+            .collect(Collectors.toMap(Monkey::id, Function.identity()));
+        int mod = monkeys.values().stream().mapToInt(Monkey::divisibleBy).reduce(1, (a, b) -> a * b);
+        Map<Integer, Long> inspectionCounts = new TreeMap<>();
+
+        for (int i = 0; i < (part2 ? 10_000 : 20); i++) {
             for (Monkey monkey : monkeys.values()) {
-                for (int item : monkey.items) {
-                    int newValue = monkey.operation.eval(item) / 3;
+                for (long item : monkey.items) {
+                    long newValue = monkey.operation.eval(item);
+                    if (part2) {
+                        newValue %= mod;
+                    } else {
+                        newValue /= 3;
+                    }
                     if (newValue % monkey.divisibleBy == 0) {
                         monkeys.get(monkey.ifTrue).items.add(newValue);
                     } else {
                         monkeys.get(monkey.ifFalse).items.add(newValue);
                     }
-                    inspectionCounts.put(monkey.id, 1 + inspectionCounts.getOrDefault(monkey.id, 0));
+                    inspectionCounts.put(monkey.id, 1L + inspectionCounts.getOrDefault(monkey.id, 0L));
                 }
 
                 monkey.items.clear();
             }
         }
 
-        TreeSet<Integer> inspectionCountsSorted = new TreeSet<>(Comparator.reverseOrder());
+        TreeSet<Long> inspectionCountsSorted = new TreeSet<>(Comparator.reverseOrder());
         inspectionCountsSorted.addAll(inspectionCounts.values());
-        Iterator<Integer> iter = inspectionCountsSorted.iterator();
-        int monkeyBusiness = iter.next() * iter.next();
+        Iterator<Long> iter = inspectionCountsSorted.iterator();
+        long monkeyBusiness = iter.next() * iter.next();
         System.out.println(monkeyBusiness);
     }
 
     private static Monkey readMonkey(List<String> lines) {
         int id = Integer.parseInt("" + lines.get(0).substring(7, lines.get(0).length() - 1));
-        List<Integer> startingItems =
+        List<Long> startingItems =
             Stream.of(lines.get(1).substring("  Starting items: ".length()).split(", "))
-                .map(Integer::parseInt)
+                .map(Long::parseLong)
                 .toList();
         String[] operationParts = lines.get(2).substring("  Operation: new = ".length()).split(" ");
         Term term1 = readTerm(operationParts[0]), term2 = readTerm(operationParts[2]);
@@ -64,7 +70,7 @@ public final class Day11Part1 {
         return new ConstantTerm(Integer.parseInt(s));
     }
 
-    private record Monkey(int id, List<Integer> items, BiOp operation, int divisibleBy, int ifTrue, int ifFalse) {
+    private record Monkey(int id, List<Long> items, BiOp operation, int divisibleBy, int ifTrue, int ifFalse) {
     }
 
     private static List<List<String>> partition(String[] input, Predicate<String> filter) {
@@ -88,30 +94,30 @@ public final class Day11Part1 {
     }
 
     private sealed interface BiOp {
-        int eval(int old);
+        long eval(long old);
     }
 
     private record AddOp(Term first, Term second) implements BiOp {
         @Override
-        public int eval(int old) {
+        public long eval(long old) {
             return first.getValue(old) + second.getValue(old);
         }
     }
 
     private record MulOp(Term first, Term second) implements BiOp {
         @Override
-        public int eval(int old) {
+        public long eval(long old) {
             return first.getValue(old) * second.getValue(old);
         }
     }
 
     private sealed interface Term {
-        int getValue(int old);
+        long getValue(long old);
     }
 
-    private record ConstantTerm(int value) implements Term {
+    private record ConstantTerm(long value) implements Term {
         @Override
-        public int getValue(int old) {
+        public long getValue(long old) {
             return value;
         }
     }
@@ -120,7 +126,7 @@ public final class Day11Part1 {
         INSTANCE;
 
         @Override
-        public int getValue(int old) {
+        public long getValue(long old) {
             return old;
         }
     }
