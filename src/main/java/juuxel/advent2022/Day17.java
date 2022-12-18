@@ -46,7 +46,7 @@ public final class Day17 {
         int maxY = 0;
         Set<Point> occupiedPoints = new HashSet<>();
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 1; i <= 7; i++) {
             occupiedPoints.add(new Point(i, 0));
         }
 
