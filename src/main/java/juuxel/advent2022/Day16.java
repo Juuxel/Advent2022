@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Deprecated // doesn't work
 public class Day16 {
     private static final Pattern PATTERN = Pattern.compile("^Valve (.+) has flow rate=(.+); tunnels? leads? to valves? (.+)$");
 
