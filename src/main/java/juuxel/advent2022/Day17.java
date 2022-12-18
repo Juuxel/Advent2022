@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.Set;
 
 public final class Day17 {
-    private static final boolean DEBUG_PRINT = false;
     private static final int LEFT_WALL = 0;
     private static final int RIGHT_WALL = 8;
     private static final Shape[] SHAPES = new Shape[] {
@@ -55,11 +54,6 @@ public final class Day17 {
             Shape shape = SHAPES[shapeIndex % SHAPES.length];
             int x = 3, y = maxY + 3 + shape.height;
 
-            if (DEBUG_PRINT && shapeIndex < 10) {
-                System.out.println("Round " + (shapeIndex + 1));
-                printSnapshot(occupiedPoints, maxY, shape, x, y);
-            }
-
             while (true) {
                 Direction horizontal = jetPattern.next();
                 int xd = horizontal == Direction.LEFT ? -1 : 1;
@@ -67,18 +61,8 @@ public final class Day17 {
                     x += xd;
                 }
 
-                if (DEBUG_PRINT && shapeIndex < 3) {
-                    System.out.printf("Pushed by jet to the %s: (%s)%n", horizontal, jetPattern.debugString(jetPattern.index - 1));
-                    printSnapshot(occupiedPoints, maxY, shape, x, y);
-                }
-
                 if (shape.canPlaceAt(x, y - 1, occupiedPoints)) {
                     y--;
-
-                    if (DEBUG_PRINT && shapeIndex < 3) {
-                        System.out.println("Fell:");
-                        printSnapshot(occupiedPoints, maxY, shape, x, y);
-                    }
                 } else {
                     // Stop the shape
                     for (int sx = 0; sx < shape.width; sx++) {
@@ -91,41 +75,12 @@ public final class Day17 {
 
                     maxY = Math.max(maxY, y);
 
-                    if (DEBUG_PRINT && shapeIndex < 3) {
-                        System.out.println("Solidified:");
-                        printSnapshot(occupiedPoints, maxY, shape, x, y);
-                    }
-
                     break;
                 }
             }
         }
 
         System.out.println(maxY);
-    }
-
-    private static void printSnapshot(Set<Point> occupiedPoints, int maxY, Shape shape, int shapeX, int shapeY) {
-        Point point = new Point(0, 0);
-        for (int y = Math.max(maxY, shapeY); y > 0; y--) {
-            System.out.print('|');
-            for (int x = 1; x <= 7; x++) {
-                point.x = x;
-                point.y = y;
-                char c;
-                if (occupiedPoints.contains(point)) {
-                    c = '#';
-                } else if (shapeX <= x && x < shapeX + shape.width && shapeY >= y && y > shapeY - shape.height &&
-                    shape.rows[shapeY - y][x - shapeX]) {
-                    c = '@';
-                } else {
-                    c = '.';
-                }
-                System.out.print(c);
-            }
-
-            System.out.println('|');
-        }
-        System.out.println("+-------+");
     }
 
     private static final class Point {
@@ -193,12 +148,6 @@ public final class Day17 {
         public Direction next() {
             index %= input.length();
             return input.charAt(index++) == '>' ? Direction.RIGHT : Direction.LEFT;
-        }
-
-        String debugString(int index) {
-            String head = index > 0 ? input.substring(0, index) : "";
-            String tail = index < input.length() - 1 ? input.substring(index + 1) : "";
-            return head + ' ' + input.charAt(index) + ' ' + tail;
         }
     }
 }
