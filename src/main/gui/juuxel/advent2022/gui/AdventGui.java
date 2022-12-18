@@ -51,6 +51,7 @@ public final class AdventGui {
         new Solution("Day 14 (Java)", 14, linesToArgs(Day14::main)),
         new Solution("Day 15 (Java)", 15, linesToArgs(Day15::main)),
         new Solution("Day 16 (Java)", 16, linesToArgs(Day16::main)),
+        new Solution("Day 17 (part 1, Java)", 17, linesToArgs(Day17::main)),
         new Solution("Day 18 (Java)", 18, linesToArgs(Day18::main)),
     };
 
