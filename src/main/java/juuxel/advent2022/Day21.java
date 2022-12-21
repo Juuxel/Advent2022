@@ -52,7 +52,7 @@ public final class Day21 {
         System.out.println((rhs.constant - lhs.constant) / (lhs.coefficient - rhs.coefficient));
     }
 
-    private static void read(String line, BiConsumer<String, Monkey> consumer) {
+    static void read(String line, BiConsumer<String, Monkey> consumer) {
         String name = line.substring(0, 4);
         String tail = line.substring(6);
         if (tail.contains(" ")) {
@@ -81,12 +81,12 @@ public final class Day21 {
         long resolve(String monkey);
     }
 
-    private sealed interface Monkey {
+    sealed interface Monkey {
         long resolve(Context context);
         LinearCombination toLinearCombination(Function<String, LinearCombination> resolver);
     }
 
-    private record ConstantMonkey(long value) implements Monkey {
+    record ConstantMonkey(long value) implements Monkey {
         @Override
         public long resolve(Context context) {
             return value;
@@ -98,7 +98,7 @@ public final class Day21 {
         }
     }
 
-    private record MathMonkey(String a, String b, Operator operator) implements Monkey {
+    record MathMonkey(String a, String b, Operator operator) implements Monkey {
         @Override
         public long resolve(Context context) {
             return operator.applyAsLong(context.resolve(a), context.resolve(b));
@@ -132,7 +132,7 @@ public final class Day21 {
         }
     }
 
-    private enum Operator implements LongBinaryOperator {
+    enum Operator implements LongBinaryOperator {
         ADD(Long::sum),
         SUBTRACT((a, b) -> a - b),
         MULTIPLY((a, b) -> a * b),

@@ -19,4 +19,5 @@ repositories {
 dependencies {
     implementation 'org.cactoos:cactoos:0.55.0'
     implementation 'com.google.guava:guava:31.1-jre'
+    implementation 'org.ow2.asm:asm-tree:9.4'
 }
